@@ -3,17 +3,19 @@ Command = tuple[str, int]
 
 class Submarine:
     def __init__(self) -> None:
+        self.aim = 0
         self.horizontal_position = 0
         self.depth = 0
 
     def forward(self, distance: int) -> None:
         self.horizontal_position += distance
+        self.depth += distance * self.aim
 
     def down(self, distance: int) -> None:
-        self.depth += distance
+        self.aim += distance
 
     def up(self, distance: int) -> None:
-        self.depth -= distance
+        self.aim -= distance
 
     def control(self, commands: list[Command]) -> None:
         for action, value in commands:
@@ -31,4 +33,5 @@ if __name__ == "__main__":
 
     submarine = Submarine()
     submarine.control(data)
-    puzzle.answer_a = submarine.horizontal_position * submarine.depth
+    puzzle.answer_a = submarine.horizontal_position * submarine.aim
+    puzzle.answer_b = submarine.horizontal_position * submarine.depth

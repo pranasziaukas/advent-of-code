@@ -17,7 +17,12 @@ class SubmarineTest(unittest.TestCase):
     def test_simple(self):
         submarine = Submarine()
         submarine.control(self.data)
-        self.assertEqual(150, submarine.horizontal_position * submarine.depth)
+        self.assertEqual(150, submarine.horizontal_position * submarine.aim)
+
+    def test_aimed(self):
+        submarine = Submarine()
+        submarine.control(self.data)
+        self.assertEqual(900, submarine.horizontal_position * submarine.depth)
 
 
 if __name__ == "__main__":
