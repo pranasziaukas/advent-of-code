@@ -5,7 +5,7 @@ from binary_diagnostic import Report
 
 class BinaryDiagnosticTest(unittest.TestCase):
     def setUp(self):
-        self.data = [
+        data = [
             "00100",
             "11110",
             "10110",
@@ -20,10 +20,15 @@ class BinaryDiagnosticTest(unittest.TestCase):
             "01010",
         ]
 
+        self.report = Report(data)
+
     def test_simple(self):
-        report = Report(self.data)
-        self.assertEqual(22, report.gamma_rate)
-        self.assertEqual(9, report.epsilon_rate)
+        self.assertEqual(22, self.report.gamma_rate)
+        self.assertEqual(9, self.report.epsilon_rate)
+
+    def test_advanced(self):
+        self.assertEqual(23, self.report.oxygen_generator_rating)
+        self.assertEqual(10, self.report.co2_scrubber_rating)
 
 
 if __name__ == "__main__":
