@@ -59,13 +59,22 @@ class FooTest(unittest.TestCase):
             1,
         ]
 
-    def test_simple(self):
-        boards = [Board(board_data) for board_data in self.boards_data]
-        bingo_game = BingoGame(boards)
+        self.bingo_game = BingoGame([Board(board_data) for board_data in self.boards_data])
+
+    def test_first_bingo(self):
         for value in self.lottery_values:
-            if bingo_game.mark(value):
+            self.bingo_game.mark(value)
+            if self.bingo_game.bingo_count == 1:
                 self.assertEqual(24, value)
-                self.assertEqual(188, bingo_game.winner.sum_unmarked())
+                self.assertEqual(188, self.bingo_game.latest_bingo_board.score())
+                break
+
+    def test_last_bingo(self):
+        for value in self.lottery_values:
+            self.bingo_game.mark(value)
+            if self.bingo_game.bingo_count == len(self.bingo_game.boards):
+                self.assertEqual(13, value)
+                self.assertEqual(148, self.bingo_game.latest_bingo_board.score())
                 break
 
 
