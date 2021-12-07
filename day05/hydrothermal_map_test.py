@@ -3,7 +3,7 @@ import unittest
 from hydrothermal_map import HydrothermalMap
 
 
-class FooTest(unittest.TestCase):
+class HydrothermalMapTest(unittest.TestCase):
     def setUp(self):
         self.data = [
             "0,9 -> 5,9",

@@ -3,7 +3,7 @@ import unittest
 from lanternfish import Lanternfish
 
 
-class FooTest(unittest.TestCase):
+class LanternfishTest(unittest.TestCase):
     def setUp(self):
         data = [3, 4, 3, 1, 2]
         self.population = Lanternfish(data)

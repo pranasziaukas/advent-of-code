@@ -3,7 +3,7 @@ import unittest
 from bingo import Board, BingoGame
 
 
-class FooTest(unittest.TestCase):
+class BingoTest(unittest.TestCase):
     def setUp(self):
         self.boards_data = [
             [
