@@ -1,3 +1,5 @@
+from collections import deque
+
 Point = int
 Points = list[Point]
 Map = list[Points]
@@ -12,6 +14,7 @@ class HeightMap:
         self.max_y = len(map_values[0])
 
         self.low_points = self._get_low_points()
+        self.basins = self._get_basins()
 
     def _is_inside(self, x: int, y: int) -> bool:
         return 0 <= x < self.max_x and 0 <= y < self.max_y
@@ -29,6 +32,26 @@ class HeightMap:
                     points.append(self.map_values[x][y])
         return points
 
+    def _get_basins(self) -> list[Points]:
+        basins = []
+        seen = set()
+        for x in range(self.max_x):
+            for y in range(self.max_y):
+                if (x, y) not in seen and self.map_values[x][y] != 9:
+                    basin = []
+                    queue = deque([(x, y)])
+                    while queue:
+                        x, y = queue.popleft()
+                        if (x, y) in seen or self.map_values[x][y] == 9:
+                            continue
+                        seen.add((x, y))
+                        basin.append(self.map_values[x][y])
+                        for dx, dy in HeightMap.neighbors:
+                            if self._is_inside(x + dx, y + dy):
+                                queue.append((x + dx, y + dy))
+                    basins.append(basin)
+        return basins
+
 
 if __name__ == "__main__":
     from aocd import models, transforms
@@ -38,3 +61,9 @@ if __name__ == "__main__":
     height_map = HeightMap(data)
 
     puzzle.answer_a = sum(height_map.low_points) + len(height_map.low_points)
+
+    largest_basins = sorted(height_map.basins, key=len, reverse=True)
+    largest_basin_areas = 1
+    for n in range(3):
+        largest_basin_areas *= len(largest_basins[n])
+    puzzle.answer_b = largest_basin_areas
