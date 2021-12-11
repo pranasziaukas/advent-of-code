@@ -32,6 +32,15 @@ class OctopusCavernTest(unittest.TestCase):
             flashes += cavern.evolve()
         self.assertEqual(1656, flashes)
 
+    def test_first_synchronization(self):
+        cavern = OctopusCavern(self.data)
+        steps = 0
+        while True:
+            steps += 1
+            if cavern.evolve() == cavern.max_x * cavern.max_y:
+                break
+        self.assertEqual(195, steps)
+
 
 if __name__ == "__main__":
     unittest.main()

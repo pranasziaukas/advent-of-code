@@ -49,7 +49,14 @@ if __name__ == "__main__":
     puzzle = models.Puzzle(year=2021, day=11)
     data = [[int(x) for x in line] for line in transforms.lines(puzzle.input_data)]
     cavern = OctopusCavern(data)
-    result = 0
-    for _ in range(100):
-        result += cavern.evolve()
-    puzzle.answer_a = result
+    steps = 0
+    flashes_total = 0
+    while True:
+        steps += 1
+        flashes_current = cavern.evolve()
+        flashes_total += flashes_current
+        if steps == 100:
+            puzzle.answer_a = flashes_total
+        if flashes_current == cavern.max_x * cavern.max_y:
+            puzzle.answer_b = steps
+            break
