@@ -1,6 +1,7 @@
 # OS related
 .DS_Store/
 .idea/
+.python-version
 
 # Python
 __pycache__/
