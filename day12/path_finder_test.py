@@ -1,14 +1,11 @@
 import unittest
 
-from path_finder import get_full_path_count
+from path_finder import get_path_count
 
 
 class PathFinderTest(unittest.TestCase):
     def setUp(self):
-        self.data = 0
-
-    def test_small(self):
-        connections = [
+        self.connections_small = [
             "start-A",
             "start-b",
             "A-c",
@@ -17,10 +14,8 @@ class PathFinderTest(unittest.TestCase):
             "A-end",
             "b-end",
         ]
-        self.assertEqual(10, get_full_path_count(connections))
 
-    def test_medium(self):
-        connections = [
+        self.connections_medium = [
             "dc-end",
             "HN-start",
             "start-kj",
@@ -32,10 +27,8 @@ class PathFinderTest(unittest.TestCase):
             "kj-HN",
             "kj-dc",
         ]
-        self.assertEqual(19, get_full_path_count(connections))
 
-    def test_large(self):
-        connections = [
+        self.connections_large = [
             "fs-end",
             "he-DX",
             "fs-he",
@@ -55,7 +48,16 @@ class PathFinderTest(unittest.TestCase):
             "pj-fs",
             "start-RW",
         ]
-        self.assertEqual(226, get_full_path_count(connections))
+
+    def test_single_visits(self):
+        self.assertEqual(10, get_path_count(self.connections_small))
+        self.assertEqual(19, get_path_count(self.connections_medium))
+        self.assertEqual(226, get_path_count(self.connections_large))
+
+    def test_double_visits(self):
+        self.assertEqual(36, get_path_count(self.connections_small, double_visit=True))
+        self.assertEqual(103, get_path_count(self.connections_medium, double_visit=True))
+        self.assertEqual(3509, get_path_count(self.connections_large, double_visit=True))
 
 
 if __name__ == "__main__":
