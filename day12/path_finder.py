@@ -1,15 +1,14 @@
 from collections import defaultdict, deque
 
 Connection = str
+Links = defaultdict[str, set[str]]
 
 START = "start"
 END = "end"
 
 
-def get_path_count(connections: list[Connection], double_visit: bool = False) -> int:
-    """Explore all routes and return the number of distinct paths between START and END."""
-
-    # set up links between caves
+def parse_links(connections: list[Connection]) -> Links:
+    """Parse cave links from raw connection values."""
     links = defaultdict(set)
     for connection in connections:
         x, y = connection.split("-")
@@ -20,7 +19,11 @@ def get_path_count(connections: list[Connection], double_visit: bool = False) ->
         caves.discard(START)
     # should not go anywhere from the end cave
     links[END] = set()
+    return links
 
+
+def get_path_count(links: Links, double_visit: bool = False) -> int:
+    """Explore all routes and return the number of distinct paths between START and END."""
     path_count = 0
     queue = deque([START, y] for y in links[START])
 
@@ -44,6 +47,6 @@ if __name__ == "__main__":
     from aocd import models, transforms
 
     puzzle = models.Puzzle(year=2021, day=12)
-    data = transforms.lines(puzzle.input_data)
+    data = parse_links(transforms.lines(puzzle.input_data))
     puzzle.answer_a = get_path_count(data)
     puzzle.answer_b = get_path_count(data, double_visit=True)
