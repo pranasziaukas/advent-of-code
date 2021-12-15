@@ -5,7 +5,7 @@ from lowest_risk import CaveMap
 
 class LowestRiskTest(unittest.TestCase):
     def setUp(self):
-        risk_data = [
+        self.risk_data = [
             "1163751742",
             "1381373672",
             "2136511328",
@@ -17,10 +17,14 @@ class LowestRiskTest(unittest.TestCase):
             "1293138521",
             "2311944581",
         ]
-        self.cave_map = CaveMap(risk_data)
 
     def test_lowest_risk(self):
-        self.assertEqual(40, self.cave_map.get_lowest_risk())
+        cave_map = CaveMap(self.risk_data)
+        self.assertEqual(40, cave_map.get_lowest_cumulative_risk())
+
+    def test_lowest_risk_5_tiles(self):
+        cave_map = CaveMap(self.risk_data, tiles=5)
+        self.assertEqual(315, cave_map.get_lowest_cumulative_risk())
 
 
 if __name__ == "__main__":
