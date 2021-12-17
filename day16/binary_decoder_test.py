@@ -19,8 +19,18 @@ class BinaryDecoderTest(unittest.TestCase):
         self.assertEqual(23, sum(Packet("C0015000016115A2E0802F182340").versions))
         self.assertEqual(31, sum(Packet("A0016C880162017C3686B18A3D4780").versions))
 
-    def test_literal_packet_value(self):
+    def test_simple_packet_value(self):
         self.assertEqual(2021, Packet("D2FE28").value)
+
+    def test_complex_packet_value(self):
+        self.assertEqual(3, Packet("C200B40A82").value)
+        self.assertEqual(54, Packet("04005AC33890").value)
+        self.assertEqual(7, Packet("880086C3E88112").value)
+        self.assertEqual(9, Packet("CE00C43D881120").value)
+        self.assertEqual(1, Packet("D8005AC2A8F0").value)
+        self.assertEqual(0, Packet("F600BC2D8F").value)
+        self.assertEqual(0, Packet("9C005AC2F8F0").value)
+        self.assertEqual(1, Packet("9C0141080250320F1802104A08").value)
 
 
 if __name__ == "__main__":

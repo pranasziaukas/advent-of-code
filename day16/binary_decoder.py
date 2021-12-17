@@ -1,13 +1,25 @@
+from math import prod
+
+
 class Bits(str):
     def __int__(self) -> int:
-        return int(self, 2)
+        return int(self, 2) if self else 0
 
 
 class Packet:
+    type_operators = {
+        0: lambda x: sum(x),
+        1: lambda x: prod(x),
+        2: lambda x: min(x),
+        3: lambda x: max(x),
+        5: lambda x: 1 if x[0] > x[1] else 0,
+        6: lambda x: 1 if x[0] < x[1] else 0,
+        7: lambda x: x[0] == x[1],
+    }
+
     def __init__(self, hex_str: str) -> None:
-        self._bits = bin(int(hex_str, 16))[2:]
-        while len(self._bits) % 4:
-            self._bits = "0" + self._bits
+        binary_str = bin(int(hex_str, 16))[2:]
+        self._bits = binary_str.rjust(4 * len(hex_str), "0")
         self._position = 0
 
         self.versions = []
@@ -24,19 +36,19 @@ class Packet:
         literal_bits = ""
         chunks_remaining = True
         while chunks_remaining:
-            chunks_remaining = self._get() == "1"
+            chunks_remaining = int(self._get()) == 1
             literal_bits += self._get(4)
         return int(literal_bits, 2)
 
     def _read_nested_values(self) -> [int]:
         """Read nested packets."""
         values = []
-        length_type_id = self._get()
-        if length_type_id == "0":
+        length_type_id = int(self._get())
+        if length_type_id == 0:
             end_position = int(self._get(15)) + self._position
             while self._position < end_position:
                 values.append(self._read())
-        elif length_type_id == "1":
+        elif length_type_id == 1:
             for _ in range(int(self._get(11))):
                 values.append(self._read())
         return values
@@ -48,9 +60,7 @@ class Packet:
         if packet_type_id == 4:
             result = self._read_literal_value()
         else:
-            self._read_nested_values()
-            # TODO: operators
-            result = 0
+            result = Packet.type_operators[packet_type_id](self._read_nested_values())
         return result
 
 
@@ -61,3 +71,4 @@ if __name__ == "__main__":
     data = transforms.lines(puzzle.input_data)[0]
     packet = Packet(data)
     puzzle.answer_a = sum(packet.versions)
+    puzzle.answer_b = packet.value
