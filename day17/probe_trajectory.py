@@ -41,7 +41,6 @@ class ProbeLauncher:
         # `dy = -(min_y + 1)` is the optimal solution.
         # The apex `y` is then the sum of an arithmetic progression:
         self.apex_y = self.min_y * (self.min_y + 1) // 2
-
         self.velocities = self._find_velocities()
 
     def _find_velocities(self) -> [Velocity]:
@@ -50,7 +49,7 @@ class ProbeLauncher:
             for dy in range(self.min_y, -self.min_y):
                 probe_position = Position(Velocity(dx, dy))
                 while probe_position.x <= self.max_x and probe_position.y >= self.min_y:
-                    if self.min_x <= probe_position.x <= self.max_x and self.min_y <= probe_position.y <= self.max_y:
+                    if probe_position.x >= self.min_x and probe_position.y <= self.max_y:
                         velocities.append(probe_position.velocity)
                         break
                     probe_position.next()
