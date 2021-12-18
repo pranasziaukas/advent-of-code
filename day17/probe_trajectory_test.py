@@ -10,6 +10,9 @@ class ProbeLauncherTest(unittest.TestCase):
     def test_apex_y(self):
         self.assertEqual(45, self.probe_launcher.apex_y)
 
+    def test_available_velocities_count(self):
+        self.assertEqual(112, len(self.probe_launcher.velocities))
+
 
 if __name__ == "__main__":
     unittest.main()
