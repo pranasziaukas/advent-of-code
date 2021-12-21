@@ -29,7 +29,7 @@ class PolymerInsertionTest(unittest.TestCase):
 
     def test_initial(self):
         element_counts = self.polymer.get_element_counts()
-        self.assertEqual(4, sum(element_counts.values()))
+        self.assertEqual(4, element_counts.total())
         self.assertEqual(1, element_counts["B"])
         self.assertEqual(1, element_counts["C"])
         self.assertEqual(2, element_counts["N"])
@@ -42,7 +42,7 @@ class PolymerInsertionTest(unittest.TestCase):
     def test_after_10_steps(self):
         self.polymer.evolve(10)
         element_counts = self.polymer.get_element_counts()
-        self.assertEqual(3073, sum(element_counts.values()))
+        self.assertEqual(3073, element_counts.total())
         self.assertEqual(1749, element_counts["B"])
         self.assertEqual(298, element_counts["C"])
         self.assertEqual(161, element_counts["H"])
