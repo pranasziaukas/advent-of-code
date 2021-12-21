@@ -1,137 +1,99 @@
 from __future__ import annotations
+
+from dataclasses import dataclass
 from itertools import permutations
 from math import ceil, floor
-from typing import Iterator
 
 
+@dataclass
 class SnailfishDigit:
-    def __init__(
-        self, value: int, depth: int, previous: SnailfishDigit = None, succeeding: SnailfishDigit = None
-    ) -> None:
-        """Create a Snailfish digit."""
-        self.value = value
-        self.depth = depth
-        self.succeeding = succeeding
-        self.previous = previous
+    value: int
+    depth: int
 
-    def __repr__(self) -> str:
-        """Representation of a digit."""
-        return f"{'[' * self.depth} {self.value} {']' * self.depth}"
+    def __str__(self) -> str:
+        """String representation of a digit."""
+        return f"{self.value}@{self.depth}"
 
 
 class SnailfishNumber:
-    def __init__(self, representation: str) -> None:
+    def __init__(self, representation: str = "") -> None:
         """Create a Snailfish number based on its string representation."""
-        self._head = SnailfishNumber._get_head_digit(representation)
-        needs_reduction = True
-        while needs_reduction:
-            needs_reduction = self._reduce()
+        self._digits = []
 
-    @staticmethod
-    def _get_head_digit(representation: str) -> SnailfishDigit:
-        """Parse a number and return its head digit."""
-        head = tail = None
+        digits = []
         depth = 0
         for x in representation:
-            if x == "[":
+            if x.isdigit():
+                digits.append(SnailfishDigit(int(x), depth))
+            elif x == "[":
                 depth += 1
             elif x == "]":
                 depth -= 1
-            elif x.isdigit():
-                digit = SnailfishDigit(int(x), depth, previous=tail)
-                try:
-                    tail.succeeding = digit
-                except AttributeError:
-                    head = digit
-                finally:
-                    tail = digit
-        return head
+        self.digits = digits
 
-    def _explode(self, digit: SnailfishDigit) -> None:
-        """Explode a pair given its first digit."""
-        first = digit
-        second = digit.succeeding
-        new_digit = SnailfishDigit(0, digit.depth - 1, previous=first.previous, succeeding=second.succeeding)
-        try:
-            first.previous.value += first.value
-            first.previous.succeeding = new_digit
-        except AttributeError:
-            self._head = new_digit
-        try:
-            second.succeeding.value += second.value
-            second.succeeding.previous = new_digit
-        except AttributeError:
-            pass
+    @property
+    def digits(self) -> [SnailfishDigit]:
+        return self._digits[:]
 
-    def _split(self, digit: SnailfishDigit) -> None:
-        """Split a digit."""
-        first = SnailfishDigit(floor(digit.value / 2), digit.depth + 1, previous=digit.previous)
-        second = SnailfishDigit(ceil(digit.value / 2), digit.depth + 1, previous=first, succeeding=digit.succeeding)
-        first.succeeding = second
-        try:
-            digit.previous.succeeding = first
-        except AttributeError:
-            self._head = first
-        try:
-            digit.succeeding.previous = second
-        except AttributeError:
-            pass
+    @digits.setter
+    def digits(self, digits: [SnailfishDigit]) -> None:
+        self._digits = digits
+        self._reduce()
 
-    def _reduce(self) -> bool:
-        """Reduce a number once and acknowledge the action."""
-        for digit in self:
-            if digit.depth > 4:
-                self._explode(digit)
-                return True
-        for digit in self:
-            if digit.value > 9:
-                self._split(digit)
-                return True
-        return False
-
-    def __iter__(self) -> Iterator[SnailfishDigit]:
-        """Iterate over the digits."""
-        digit = self._head
-        while digit:
-            yield digit
-            digit = digit.succeeding
-
-    def __str__(self) -> str:
-        """String serialization of a number."""
-        representation = ""
-        depth = 0
-        for digit in self:
-            while depth < digit.depth:
-                representation += "["
-                depth += 1
-            while depth > digit.depth:
-                representation = representation[:-1] + "],"
-                depth -= 1
-            representation += f"{digit.value},"
-            digit = digit.succeeding
-        return representation[:-1] + "]" * depth
-
-    def __repr__(self) -> str:
-        """Representation of a number."""
-        return f"SnailfishNumber({str(self)})"
-
-    def __len__(self) -> int:
-        """Magnitude of a number."""
-        value_depths = [(digit.value, digit.depth) for digit in self]
-        while len(value_depths) > 1:
-            for i, ((this_value, this_depth), (that_value, that_depth)) in enumerate(
-                zip(value_depths, value_depths[1:])
-            ):
-                if this_depth != that_depth:
+    def _reduce(self) -> None:
+        def explode():
+            for n, (x, y) in enumerate(zip(self._digits[:-1], self._digits[1:])):
+                if x.depth < 5 or x.depth != y.depth:
                     continue
-                val = this_value * 3 + that_value * 2
-                value_depths = value_depths[:i] + [(val, this_depth - 1)] + value_depths[i + 2 :]
+                if n > 0:
+                    self._digits[n - 1].value += x.value
+                if n < len(self._digits) - 2:
+                    self._digits[n + 2].value += y.value
+                new_digit = SnailfishDigit(0, x.depth - 1)
+                self._digits = self._digits[:n] + [new_digit] + self._digits[n + 2 :]
+                return True
+            return False
+
+        def split():
+            for n, digit in enumerate(self._digits):
+                if digit.value < 10:
+                    continue
+                new_digits = [
+                    SnailfishDigit(floor(digit.value / 2), digit.depth + 1),
+                    SnailfishDigit(ceil(digit.value / 2), digit.depth + 1),
+                ]
+                self._digits = self._digits[:n] + new_digits + self._digits[n + 1 :]
+                return True
+            return False
+
+        while True:
+            if explode():
+                continue
+            if not split():
                 break
-        return value_depths[0][0]
 
     def __add__(self, other: SnailfishNumber) -> SnailfishNumber:
         """Sum of two numbers."""
-        return SnailfishNumber(f"[{str(self)},{str(other)}]")
+        number = SnailfishNumber()
+        number.digits = [SnailfishDigit(d.value, d.depth + 1) for d in self.digits + other.digits]
+        return number
+
+    def __len__(self) -> int:
+        """Magnitude of a number."""
+        digits = self.digits
+        # reduce to a single digit
+        while len(digits) > 1:
+            for n, (x, y) in enumerate(zip(digits[:-1], digits[1:])):
+                if x.depth != y.depth:
+                    continue
+                new_digit = SnailfishDigit(3 * x.value + 2 * y.value, x.depth - 1)
+                digits = digits[:n] + [new_digit] + digits[n + 2 :]
+                break
+        return digits[0].value
+
+    def __str__(self) -> str:
+        """String representation of a number."""
+        return " ".join(str(digit) for digit in self.digits)
 
     def __eq__(self, other: SnailfishNumber) -> bool:
         """Check the equality of two numbers."""
