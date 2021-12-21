@@ -6,7 +6,6 @@
 # Python
 __pycache__/
 *.py[cod]
-poetry.lock
 
 # Testing
 .pytest_cache/
