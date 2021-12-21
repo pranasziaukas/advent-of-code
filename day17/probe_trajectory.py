@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     puzzle = models.Puzzle(year=2021, day=17)
     data = transforms.lines(puzzle.input_data)[0]
-    boundaries = map(int, search("x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)", data).groups())
+    boundaries = map(int, search(r"x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)", data).groups())
     probe_launcher = ProbeLauncher(*boundaries)
     puzzle.answer_a = probe_launcher.apex_y
     puzzle.answer_b = len(probe_launcher.velocities)
