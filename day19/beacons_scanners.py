@@ -1,9 +1,7 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from time import perf_counter as pfc
-import re
-from itertools import combinations, permutations, product
-from collections import Counter
+from itertools import permutations, product
 
 
 @dataclass(frozen=True)
@@ -19,7 +17,8 @@ class Point:
         return Point(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __abs__(self) -> int:
-        return self.x ** 2 + self.y ** 2 + self.z ** 2
+        """Manhattan distance."""
+        return abs(self.x) + abs(self.y) + abs(self.z)
 
 
 @dataclass
@@ -72,13 +71,17 @@ class ScannerMap:
                 for unknown_scanner in [scanner for scanner in self.scanners if scanner.position is None]:
                     unknown_scanner.align_with(known_scanner)
 
+    def get_scanners(self) -> {Point}:
+        """Get unique scanner locations, first scanner being at `(0,0,0)`."""
+        return {scanner.position for scanner in self.scanners}
+
     def get_beacons(self) -> {Point}:
-        """Get the unique beacon locations, all relative to the first scanner."""
+        """Get unique beacon locations, all relative to the first scanner."""
         return {p for scanner in self.scanners for p in scanner.beacons}
 
 
 if __name__ == "__main__":
-    from aocd import models, transforms
+    from aocd import models
 
     puzzle = models.Puzzle(year=2021, day=19)
     data = [
@@ -87,3 +90,4 @@ if __name__ == "__main__":
     ]
     scanner_map = ScannerMap(data)
     puzzle.answer_a = len(scanner_map.get_beacons())
+    puzzle.answer_b = max(abs(p - q) for p, q in product(scanner_map.get_scanners(), repeat=2))

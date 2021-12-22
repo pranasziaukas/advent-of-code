@@ -148,19 +148,37 @@ class BeaconsScannersTest(unittest.TestCase):
             ]
         ]
 
-    def test_identical(self):
+        self.scanner_map = ScannerMap(self.reports)
+
+    def test_identical_scanners(self):
         for report in self.reports:
             self.assertEqual(len(report), len(ScannerMap([report, report]).get_beacons()))
 
-    def test_matching_pairs(self):
+    def test_matching_pairs_of_scanners(self):
         for n1, n2 in [(0, 1), (1, 4)]:
             this_report = self.reports[n1]
             that_report = self.reports[n2]
             beacon_count = len(this_report) + len(that_report) - 12
             self.assertEqual(beacon_count, len(ScannerMap([this_report, that_report]).get_beacons()))
 
-    def test_full_map(self):
-        self.assertEqual(79, len(ScannerMap(self.reports).get_beacons()))
+    def test_full_map_of_scanners(self):
+        self.assertEqual(79, len(self.scanner_map.get_beacons()))
+
+    def test_scanner_locations(self):
+        locations = {
+            Point(x, y, z)
+            for x, y, z in [
+                (1105, -1205, 1229),
+                (-20, -1133, 1061),
+                (0, 0, 0),
+                (68, -1246, -43),
+                (-92, -2380, -20),
+            ]
+        }
+        self.assertCountEqual(locations, self.scanner_map.get_scanners())
+
+    def test_manhattan_distance(self):
+        self.assertEqual(3621, abs(Point(1105, -1205, 1229) - Point(-92, -2380, -20)))
 
 
 if __name__ == "__main__":
