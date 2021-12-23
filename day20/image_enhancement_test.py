@@ -35,13 +35,11 @@ class ImageEnhancementTest(unittest.TestCase):
 
         result = "\n".join(
             [
-                ".......",
-                ".#..#..",
-                ".#.....",
-                ".##..#.",
-                "...#...",
-                "...###.",
-                ".......",
+                "#..#.",
+                "#....",
+                "##..#",
+                "..#..",
+                "..###",
             ]
         )
         self.assertEqual(result, str(self.image))
@@ -52,15 +50,13 @@ class ImageEnhancementTest(unittest.TestCase):
 
         result = "\n".join(
             [
-                ".........",
-                "..##.##..",
-                ".#..#.#..",
-                ".##.#..#.",
-                ".####..#.",
-                "..#..##..",
-                "...##..#.",
-                "....#.#..",
-                ".........",
+                ".##.##.",
+                "#..#.#.",
+                "##.#..#",
+                "####..#",
+                ".#..##.",
+                "..##..#",
+                "...#.#.",
             ]
         )
         self.assertEqual(result, str(self.image))
@@ -71,20 +67,22 @@ class ImageEnhancementTest(unittest.TestCase):
 
         result = "\n".join(
             [
-                "...........",
-                "........#..",
-                "..#..#.#...",
-                ".#.#...###.",
-                ".#...##.#..",
-                ".#.....#.#.",
-                "..#.#####..",
-                "...#.#####.",
-                "....##.##..",
-                ".....###...",
-                "...........",
+                ".......#.",
+                ".#..#.#..",
+                "#.#...###",
+                "#...##.#.",
+                "#.....#.#",
+                ".#.#####.",
+                "..#.#####",
+                "...##.##.",
+                "....###..",
             ]
         )
         self.assertEqual(result, str(self.image))
+
+    def test_pixels_step_50(self):
+        self.image.enhance(steps=50)
+        self.assertEqual(3351, len(self.image))
 
     def test_infinite_pixels(self):
         # An alternating grid of infinite lit pixels.

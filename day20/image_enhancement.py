@@ -1,11 +1,8 @@
-from dataclasses import dataclass
+from collections import namedtuple
 from itertools import product
 
 
-@dataclass(frozen=True)
-class Point:
-    x: int
-    y: int
+Point = namedtuple("Point", ["x", "y"])
 
 
 class Image:
@@ -24,13 +21,8 @@ class Image:
     def pixels(self, pixels: {Point}) -> None:
         """Set lit pixels, recalculate the +-1 padded finite boundaries."""
         self._pixels = pixels
-
-        for axis in ["x", "y"]:
-            setattr(
-                self,
-                f"range_{axis}",
-                range(min(getattr(p, axis) for p in pixels) - 1, max(getattr(p, axis) for p in pixels) + 2),
-            )
+        self._min = Point(*[min(getattr(p, axis) for p in pixels) for axis in ["x", "y"]])
+        self._max = Point(*[max(getattr(p, axis) for p in pixels) for axis in ["x", "y"]])
 
     def __len__(self) -> int:
         """Count lit pixels."""
@@ -40,7 +32,7 @@ class Image:
 
     def _is_outside(self, point: Point) -> bool:
         """Check if the point is outside the finite sub-image."""
-        return not (point.x in self.range_x and point.y in self.range_y)
+        return not (self._min.x <= point.x <= self._max.x and self._min.y <= point.y <= self._max.y)
 
     def enhance(self, steps: int = 1) -> None:
         """Enhance the image based on the existing decoding algorithm."""
@@ -48,8 +40,9 @@ class Image:
             return
 
         pixels = set()
-        for x in self.range_x:
-            for y in self.range_y:
+        # Iterate over the +-1 padded region.
+        for x in range(self._min.x - 1, self._max.x + 2):
+            for y in range(self._min.y - 1, self._max.y + 2):
                 code = 0
                 pixel = None
                 for n, (dy, dx) in enumerate(product([1, 0, -1], repeat=2)):
@@ -71,8 +64,8 @@ class Image:
     def __str__(self):
         """Visualize results."""
         result = ""
-        for y in self.range_y:
-            for x in self.range_x:
+        for y in range(self._min.y, self._max.y + 1):
+            for x in range(self._min.x, self._max.x + 1):
                 result += "#" if Point(x, y) in self.pixels else "."
             result += "\n"
         return result[:-1]
@@ -91,3 +84,6 @@ if __name__ == "__main__":
 
     image.enhance(steps=2)
     puzzle.answer_a = len(image)
+
+    image.enhance(steps=48)
+    puzzle.answer_b = len(image)
