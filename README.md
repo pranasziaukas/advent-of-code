@@ -1,6 +1,6 @@
-# Advent of Code 2021
+# Advent of Code
 
-[![test](https://github.com/pranasziaukas/advent-of-code-2021/actions/workflows/test.yml/badge.svg)](https://github.com/pranasziaukas/advent-of-code-2021/actions/workflows/test.yml)
+[![test](https://github.com/pranasziaukas/advent-of-code/actions/workflows/test.yml/badge.svg)](https://github.com/pranasziaukas/advent-of-code/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/pranasziaukas/advent-of-code-2021/blob/main/LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -12,6 +12,6 @@ People use them as a speed contest, interview prep, company training, university
 
 ## How to use it?
 
-[Here](https://adventofcode.com/2021) is the 2021 version.
+[Here](https://adventofcode.com/2022) is the latest version.
 
 Then do `make solution day=<number>` to create a solution folder based on the (very) simple template and have fun!
