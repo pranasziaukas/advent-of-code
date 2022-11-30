@@ -56,7 +56,7 @@ class Image:
         self.pixels = pixels
 
         # Determine if the (infinite) outside pixels are lit
-        outside_code = (2 ** 9) - 1 if self._light_outside else 0
+        outside_code = (2**9) - 1 if self._light_outside else 0
         self._light_outside = outside_code in self.light_codes
 
         self.enhance(steps - 1)
