@@ -9,7 +9,7 @@ environment:
 
 ## Inspect the code style using Flake8
 lint:
-	$(EXECUTOR) flake8 --max-line-length=120 --benchmark
+	$(EXECUTOR) flake8 --max-line-length=120 --extend-ignore=E203 --benchmark
 
 ## Test the exercises using Pytest
 test:
