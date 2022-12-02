@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "advent-of-code"
-version = "2021.25.0"
+version = "2022.01.0"
 description = "Advent of Code solutions"
 authors = ["Pranas Ziaukas <pranas@ziaukas.lt>"]
 
