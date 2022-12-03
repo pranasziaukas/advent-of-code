@@ -1,5 +1,5 @@
-def parse(raw_data: str) -> [[str]]:
-    return [[x[: len(x) // 2], x[len(x) // 2 :]] for x in raw_data.splitlines()]
+def split_in_half(items: str) -> [str, str]:
+    return [items[: len(items) // 2], items[len(items) // 2 :]]
 
 
 def find_common_item(item_list: [str]) -> str:
@@ -15,12 +15,14 @@ def get_priority(item: str) -> int:
 
 
 if __name__ == "__main__":
-    from aocd import models
+    from aocd import models, transforms
 
     puzzle = models.Puzzle(year=2022, day=3)
 
-    data_demo = parse(puzzle.example_data)
-    assert sum(get_priority(find_common_item(x)) for x in data_demo) == 157
+    data_demo = transforms.lines(puzzle.example_data)
+    assert sum(get_priority(find_common_item(split_in_half(x))) for x in data_demo) == 157
+    assert sum(get_priority(find_common_item(x)) for x in list(zip(*[iter(data_demo)] * 3))) == 70
 
-    data = parse(puzzle.input_data)
-    puzzle.answer_a = sum(get_priority(find_common_item(x)) for x in data)
+    data = transforms.lines(puzzle.input_data)
+    puzzle.answer_a = sum(get_priority(find_common_item(split_in_half(x))) for x in data)
+    puzzle.answer_b = sum(get_priority(find_common_item(x)) for x in list(zip(*[iter(data)] * 3)))

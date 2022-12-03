@@ -1,9 +1,13 @@
 import unittest
 
-from rucksack_reorganization import find_common_item, get_priority
+from rucksack_reorganization import split_in_half, find_common_item, get_priority
 
 
 class RucksackReorganizationTest(unittest.TestCase):
+    def test_split_in_half(self):
+        self.assertListEqual(["a", "b"], split_in_half("ab"))
+        self.assertListEqual(["ab", "cd"], split_in_half("abcd"))
+
     def test_find_common_item(self):
         self.assertEqual("x", find_common_item(["x", "x"]))
         self.assertEqual("c", find_common_item(["abc", "cde"]))
