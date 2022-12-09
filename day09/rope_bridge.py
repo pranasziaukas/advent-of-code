@@ -56,3 +56,4 @@ if __name__ == "__main__":
         rope.move(data_instruction)
 
     puzzle.answer_a = len(rope.seen1)
+    puzzle.answer_b = len(rope.seen9)
