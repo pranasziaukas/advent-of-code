@@ -16,7 +16,7 @@ def overlaps(intervals: (Interval, Interval)) -> bool:
 
 
 if __name__ == "__main__":
-    from aocd import models, transforms
+    from aocd import models
 
     puzzle = models.Puzzle(year=2022, day=4)
 
