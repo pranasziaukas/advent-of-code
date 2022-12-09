@@ -17,12 +17,12 @@ class RockPaperScissorsTest(unittest.TestCase):
         self.assertEqual(8, score(Shape.ROCK, Shape.PAPER))
 
     def test_find_shapes_simple(self):
-        self.assertEqual((Shape.ROCK, Shape.ROCK), find_shapes_simple(("A", "X")))
-        self.assertEqual((Shape.PAPER, Shape.SCISSORS), find_shapes_simple(("B", "Z")))
+        self.assertEqual((Shape.ROCK, Shape.ROCK), find_shapes_simple("A", "X"))
+        self.assertEqual((Shape.PAPER, Shape.SCISSORS), find_shapes_simple("B", "Z"))
 
     def test_find_shapes_advanced(self):
-        self.assertEqual((Shape.ROCK, Shape.SCISSORS), find_shapes_advanced(("A", "X")))
-        self.assertEqual((Shape.PAPER, Shape.SCISSORS), find_shapes_advanced(("B", "Z")))
+        self.assertEqual((Shape.ROCK, Shape.SCISSORS), find_shapes_advanced("A", "X"))
+        self.assertEqual((Shape.PAPER, Shape.SCISSORS), find_shapes_advanced("B", "Z"))
 
 
 if __name__ == "__main__":
