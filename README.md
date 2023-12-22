@@ -12,6 +12,6 @@ People use them as a speed contest, interview prep, company training, university
 
 ## How to use it?
 
-[Here](https://adventofcode.com/2022) is the latest version.
+[Here](https://adventofcode.com/2023) is the latest version.
 
 Then do `make solution day=<number>` to create a solution folder based on the (very) simple template and have fun!
