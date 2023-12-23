@@ -18,4 +18,4 @@ test:
 ## Create a day folder based on the template, day=<number>
 solution:
 	cp -r .day_template day$$day &&\
-	sed -i '' '/^version/s|2022.[0-9][0-9].[0-9]|2022.'$$day'.0|' pyproject.toml
+	sed -i '' '/^version/s|2023.[0-9][0-9].[0-9]|2023.'$$day'.0|' pyproject.toml

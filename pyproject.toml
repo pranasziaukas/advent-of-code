@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "advent-of-code"
-version = "2022.11.1"
+version = "2023.1.0"
 description = "Advent of Code solutions"
 authors = ["Pranas Ziaukas <pranas@ziaukas.lt>"]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.11"
 advent-of-code-data = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
